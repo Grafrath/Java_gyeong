@@ -24,6 +24,19 @@ public class Casting {
 		int i1 = 10;
 		byte b1 = (byte)i1;
 		
+		//정수 -> 문자
+		int i2 = 65;
+		char c1 = (char)i2;
+		System.out.println(c1);
+		
+		Integer  n = 10;
+		System.out.println(n.getClass().getSimpleName());
+		
+		// 문자열을 기본 타입으로 변환
+		
+		// Byte = Byte.parseByte();
+		// int = integer.parseint();
+		// short = short.parseshort();
 	}
 
 }
