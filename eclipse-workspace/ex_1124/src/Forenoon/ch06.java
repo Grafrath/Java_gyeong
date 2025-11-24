@@ -65,6 +65,7 @@ public class ch06 {
 		System.out.println("짝수의 갯수는 " + cnt);
 		System.out.println("홀수의 갯수는 " + (arr1.length-cnt));
 		
+		/*
 		cnt = sc.nextInt();
 		
 		int[] arr2 = new int[cnt];
@@ -95,11 +96,14 @@ public class ch06 {
 		}
 		
 		System.out.println("짝수의 합 " + sum);
+
+		*/
 		
 		int tmp;
 		int i,j;
 		int[] r_num = { 6,2,1,10,5,8,4,3,9,7 };
 		
+		/*
 		for (i=0;i<r_num.length-1;i++) {
 			for (j=i+1;j<r_num.length;j++) {
 				if (r_num[i] > r_num[j]) {
@@ -109,6 +113,19 @@ public class ch06 {
 				}
 			}
 		}
+		*/
+
+		
+		for (i=1;i<r_num.length;i++) {
+			for (j=i;j>0;j--) {
+				if (r_num[j-1] < r_num[j]) {
+					tmp = r_num[j-1];
+					r_num[j-1] = r_num[j];
+					r_num[j] = tmp;
+				}
+			}
+		}
+		
 		
 		for(i=0; i<r_num.length; i++) {
 			System.out.println(r_num[i]);
