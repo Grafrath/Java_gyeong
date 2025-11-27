@@ -20,9 +20,7 @@ public class Main {
 		fly.fly();
 		
 		Child ch = new Child(10);
-		
-		
-		
+				
 	}
 
 }
