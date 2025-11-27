@@ -9,6 +9,7 @@ public class Child extends Parent {
 	}
 	
 	public void ChildMethod() {
+		super.ParentMethod();
 		System.out.println("자식 메서드");
 	}
 
