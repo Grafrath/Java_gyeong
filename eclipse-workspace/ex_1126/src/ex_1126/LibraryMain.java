@@ -3,7 +3,7 @@ package ex_1126;
 public class LibraryMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		Library l1 = new Library(3);
 		
 		l1.addBook("반지의제왕", "톨킨");
@@ -22,7 +22,7 @@ public class LibraryMain {
 public class LibraryMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		Library l1 = new Library(3);
 		
 		l1.addBook("반지의제왕", "톨킨");

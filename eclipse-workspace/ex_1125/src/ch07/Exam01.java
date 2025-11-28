@@ -4,7 +4,7 @@ import java.util.*;
 public class Exam01 {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 		//단일 문자 배열에 단어와 숫자를 섞어 넣는다.
 		char[] cards = {'1','L','O','2','V','3','E'};

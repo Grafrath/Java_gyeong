@@ -3,7 +3,7 @@ package ch01;
 public class Casting {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 		byte bytevalue = 10;
 		int intvalue = bytevalue;

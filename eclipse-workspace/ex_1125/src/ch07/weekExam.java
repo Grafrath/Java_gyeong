@@ -4,7 +4,7 @@ import java.util.*;
 public class weekExam {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 		Week today=null;
 		Calendar cal = Calendar.getInstance();

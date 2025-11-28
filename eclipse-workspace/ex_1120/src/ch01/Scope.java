@@ -3,7 +3,7 @@ package ch01;
 public class Scope {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 		//변수의 사용범위
 		int var1; //main()메소드 영역에서 변수의 선언

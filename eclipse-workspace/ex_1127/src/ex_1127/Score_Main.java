@@ -4,7 +4,7 @@ import java.util.*;
 public class Score_Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 		Score sco = new Score();
 		Scanner sc = new Scanner(System.in);

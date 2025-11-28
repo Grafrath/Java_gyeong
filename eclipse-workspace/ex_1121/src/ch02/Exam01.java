@@ -4,7 +4,7 @@ import java.util.*;
 public class Exam01 {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 //      과수원이 있다.
 //

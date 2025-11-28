@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Scan {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		//데이터입력
 		//키보드를 통해 다양한 데이터를 입력할 수있다.
 		//java.util. 안의 Scanner클래스를 이용해야 한다.

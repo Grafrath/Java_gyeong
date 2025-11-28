@@ -3,7 +3,7 @@ package ch01;
 public class Printf {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		
 		String name = "최가";
 		String address = "부평구";

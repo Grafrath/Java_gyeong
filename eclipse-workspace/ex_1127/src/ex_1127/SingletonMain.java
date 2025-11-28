@@ -3,7 +3,7 @@ package ex_1127;
 public class SingletonMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		//Singleton sin = new Singleton();
 		
 		Singleton single01 = Singleton.getInstance();

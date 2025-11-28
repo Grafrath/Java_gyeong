@@ -3,7 +3,7 @@ package ex_1127;
 public class CounterMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 		Counter c1 = Counter.getInstance();
 		Counter c2 = Counter.getInstance();
 		
