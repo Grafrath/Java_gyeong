@@ -10,7 +10,7 @@ public class PatternExample {
 		//문자열이 내가 정한 형식에 맞는지 검증하는 표현식
 		//[] -> 문자, 일치하는 문자가 1개만 있는지 검증
 		
-		String reg = "^(?.*[a-z])[a-zA-Z]+$";
+		String reg = "^(?=.*[a-z])[a-zA-Z]+$";
 		String data = "aHKJH";
 		
 		//Pattern클래스
@@ -28,6 +28,13 @@ public class PatternExample {
 		System.out.println("1abc".matches(regex));     // false (첫글자 숫자)
 		System.out.println("Ab".matches(regex));       // false (너무 짧음)
 		System.out.println("AveryLongUsername123".matches(regex)); // false (너무 김)
+		
+		System.out.println("----------");
+		
+		//이메일
+		regex = "\\w+@\\w+\\.\\w+(\\.\\w+)?";
+		String email = "test@ex.amuk";
+		System.out.println(email.matches(regex));
 		
 	}
 

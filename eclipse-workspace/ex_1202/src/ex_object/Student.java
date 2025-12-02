@@ -5,7 +5,12 @@ public class Student {
 	private int no;
 	private String name;
 	
-	Student(int n, String na) {
+	public Student(int n, String na) {
+		no = n;
+		name = na;		
+	}
+	
+	public Student(String na, int n) {
 		no = n;
 		name = na;		
 	}
