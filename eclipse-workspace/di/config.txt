@@ -1,0 +1,6 @@
+car=d1.Car
+SportCar=d1.SportCar
+Truck=d1.Truck
+engine=d1.Engine
+
+key=value
