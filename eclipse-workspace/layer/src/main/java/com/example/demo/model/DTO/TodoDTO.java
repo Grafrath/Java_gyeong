@@ -1,4 +1,6 @@
-package com.example.demo.model.controller;
+package com.example.demo.model.DTO;
+
+import com.example.demo.model.persistence.TodoEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
