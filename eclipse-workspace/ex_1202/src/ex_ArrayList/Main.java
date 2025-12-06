@@ -117,7 +117,7 @@ public class Main {
 		Map<String, Integer> Student = new HashMap<>();
 		List<Student> stu = new ArrayList<>();		
 		
-		userlist.sort(Comparator.comparingInt(u -> u.score()));
+		userlist.sort(Comparator.comparingInt(u -> u.age()));
 
 		User maxUser = userlist.get(userlist.size() - 1);
 		System.out.println("최댓값: " + maxUser);

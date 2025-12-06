@@ -9,7 +9,6 @@ public record User(String name, int age) {
 	//레코드는 불변객체라서 setter가 필요없고 필드도 final이라 변경이 불가하다.
 	public void print() {
 		System.out.println("이름: " + name + " 나이: " + age);
-	}
-	
+	}	
 	
 }

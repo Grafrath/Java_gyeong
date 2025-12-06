@@ -1,0 +1,38 @@
+package com.example.demo.model.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.DTO.ResponseDTO;
+import com.example.demo.model.service.TodoService;
+
+@RestController
+@RequestMapping("todo")
+public class TodoController {
+	@Autowired
+	private TodoService service;
+	
+	@GetMapping("/test1")
+	public ResponseEntity<?> testTodo1(){
+		String str = service.testService();
+		List<String> list = new ArrayList<>();
+		list.add(str);
+		ResponseDTO<String>response = ResponseDTO.<String>builder().data(list).build();
+		return ResponseEntity.ok().body(response);
+	}
+	
+	@GetMapping("/test2")
+	public ResponseEntity<?> testTodo2(){
+		String str = service.todoService();
+		List<String> list = new ArrayList<>();
+		list.add(str);
+		ResponseDTO<String>response = ResponseDTO.<String>builder().data(list).build();
+		return ResponseEntity.ok().body(response);
+	}
+}
