@@ -64,15 +64,18 @@ public class ProductService {
 	public ProductEntity update(ProductEntity entity) {
 		validate(entity);
 		
-		ProductEntity product = repository.findById(entity.getId())
-				.orElseThrow(() -> new RuntimeException("상품이 존재하지 않습니다."));
+		Optional<ProductEntity> original = repository.findById(entity.getId());
 		
-		product.setName(entity.getName());
-		product.setPrice(entity.getPrice());
-		product.setStock(entity.getStock());
-		product.setDescription(entity.getDescription());
+		original.ifPresent(product -> {
+			product.setName(entity.getName());
+			product.setPrice(entity.getPrice());
+			product.setStock(entity.getStock());
+			product.setDescription(entity.getDescription());
+			
+			repository.save(product);
+		});
 		
-		return repository.save(product);
+		return retrieveOne(entity.getId());
 	}
 	
 	//삭제

@@ -23,18 +23,3 @@ public class UserEntity {
 	@Column(unique = true, nullable = false)
 	private String email;
 }
-
-/*
-
-com.korea.user.service
-UserService
-
-사용자를 생성하는 create메서드 생성하기
-
-com.korea.user.controller
-UserController
-
-유저를 추가하는 createUser메서드
-HTTP 메서드 : POST
-
-*/

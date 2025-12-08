@@ -1,6 +1,7 @@
 package com.korea.user.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -45,14 +46,27 @@ public class UserService {
 	public UserEntity update (UserEntity entity) {
 		validate(entity);
 		
-		UserEntity user = repository.findByEmail(entity.getEmail());
+		Optional<UserEntity> original = repository.findById(entity.getId());
 		
-		user.setName(entity.getName());
-		user.setEmail(entity.getEmail());
+		original.ifPresent(user -> {
+			user.setName(entity.getName());
+			user.setEmail(entity.getEmail());
+			
+			repository.save(user);
+		});
 		
-		return repository.save(user);
+		return retrieveOne(entity.getEmail());
 	}
 	
-	
+	public boolean delete(int id) {
+		Optional<UserEntity> user = repository.findById(id);
+		
+		if (user.isPresent()) {
+			repository.delete(user.get());
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }
