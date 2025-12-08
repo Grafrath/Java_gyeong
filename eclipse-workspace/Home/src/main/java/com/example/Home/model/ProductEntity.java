@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 public class ProductEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int id;
-	String name;
-	int price;
-	int stock;
-	String description;
+	private long  id;
+	private String name;
+	private int price;
+	private int stock;
+	private String description;
 }

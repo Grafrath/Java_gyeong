@@ -1,0 +1,58 @@
+{
+  "name": "게이밍 마우스",
+  "price": 35000,
+  "stock": 20,
+  "description": "RGB 지원 무선 마우스"
+}
+
+{
+  "name": "저소음 마우스",
+  "price": 10000,
+  "stock": 15,
+  "description": "무선 저소음 키보드"
+}
+
+{
+  "name": "게이밍 키보드",
+  "price": 50000,
+  "stock": 30,
+  "description": "RGB 지원 무선 키보드"
+}
+
+{
+  "name": "저소음 키보드",
+  "price": 15000,
+  "stock": 15,
+  "description": "무선 저소음 키보드"
+}
+
+{
+  "name": "유선 게이밍키보드",
+  "price": 50000,
+  "stock": 25,
+  "description": "RGB 지원 유선 키보드"
+}
+
+createProduct
+
+listProduct
+/listProduct/{id}
+
+updateProduct
+
+/deleteProduct/{id}
+
+{
+  "name": "테스트네임1",
+  "email": "테스트메일1"
+}
+
+{
+  "name": "테스트네임2",
+  "email": "테스트메일2"
+}
+
+{
+  "name": "테스트네임3",
+  "email": "테스트메일3"
+}

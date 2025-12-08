@@ -1,6 +1,5 @@
 package com.example.Home.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.Home.model.ProductEntity;
 import com.example.Home.persistence.ProductRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,14 +41,50 @@ public class ProductService {
 		}
 	}
 	
-	public ProductEntity create (ProductEntity entity) {
+	//전체 조회
+	public List<ProductEntity> retrieve () {
+		return repository.findAll();
+	}
+	
+	//단일 조회
+    public ProductEntity retrieveOne(long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+    }
+	
+    //생성
+    public ProductEntity create (ProductEntity entity) {
+    	validate(entity);
+		
+    	return repository.save(entity);
+    }
+	
+	//수정
+	@Transactional
+	public ProductEntity update(ProductEntity entity) {
 		validate(entity);
 		
-		ProductEntity saved = repository.save(entity);
+		ProductEntity product = repository.findById(entity.getId())
+				.orElseThrow(() -> new RuntimeException("상품이 존재하지 않습니다."));
 		
-		log.info("Entity Id : {} is saved", saved.getId());
+		product.setName(entity.getName());
+		product.setPrice(entity.getPrice());
+		product.setStock(entity.getStock());
+		product.setDescription(entity.getDescription());
 		
-		return saved;
+		return repository.save(product);
+	}
+	
+	//삭제
+	public List<ProductEntity> delete(long id) {
+		Optional<ProductEntity> product = repository.findById(id);
+		
+		if (product.isEmpty()) {
+			throw new RuntimeException("해당 상품이 존재하지 않습니다.");
+		}
+		
+		repository.deleteById(id);
+		return repository.findAll();
 	}
 	
 }

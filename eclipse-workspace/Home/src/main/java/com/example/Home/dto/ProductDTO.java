@@ -1,7 +1,5 @@
 package com.example.Home.dto;
 
-import java.util.List;
-
 import com.example.Home.model.ProductEntity;
 
 import lombok.AllArgsConstructor;
@@ -14,13 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ProductDTO {
-	private int id;
+	private long id;
 	private String name;
 	private int stock;
 	private String description;
 	private int price;
 	
-	public ProductDTO (final ProductEntity entity) {
+	public ProductDTO (ProductEntity entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();
 		this.stock = entity.getStock();

@@ -1,13 +1,13 @@
-package com.example.Home;
+package com.korea.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HomeApplication {
+public class UserApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HomeApplication.class, args);
+		SpringApplication.run(UserApplication.class, args);
 	}
 
 }

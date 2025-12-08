@@ -85,8 +85,12 @@ public class TodoController {
 		//서비스레이어의 retrieve메서드를 이용해 Todo리스트를 반환받아 entities에 저장한다.
 		List<TodoEntity> entities = service.retrieve(temporaryUserId);
 		
-		//자바 스트림을 이용해 반환된 엔티티 리스트를 TodoDTO 리스트로 변환한다.
-		List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+		//자반환된 엔티티 리스트를 TodoDTO 리스트로 변환한다.
+		List<TodoDTO> dtos = new ArrayList<TodoDTO>();
+		
+		for (TodoEntity e : entities) {
+			dtos.add(new TodoDTO(e));
+		}
 		
 		//변환된 TodoDTO 리스트를 이용해 ResponseDTO를 초기화한다.
 		ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
