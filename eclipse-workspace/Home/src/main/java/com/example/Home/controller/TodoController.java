@@ -45,7 +45,7 @@ public class TodoController {
 		return ResponseEntity.ok().body(response);
 	}
 	
-	@PostMapping("/post")
+	@PostMapping("/createTodo")
 	public ResponseEntity<?> createTodo (@RequestBody TodoDTO dto) {
 		try {
 			//임시 유저id
@@ -78,7 +78,7 @@ public class TodoController {
 		}
 	}
 	
-	@GetMapping("/get")
+	@GetMapping("/retrieveTodoList")
 	public ResponseEntity<?> retrieveTodoList(){
 		String temporaryUserId = "temporary-user";
 		
@@ -94,7 +94,7 @@ public class TodoController {
 		return ResponseEntity.ok().body(response);
 	}
 	
-	@PutMapping("/put")
+	@PutMapping("/updateTodo")
 	public ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto){
 		String temporaryUserId = "temporary-user";
 		
@@ -115,7 +115,7 @@ public class TodoController {
 		return ResponseEntity.ok().body(response);
 	}
 	
-	@DeleteMapping("/delet")
+	@DeleteMapping("/deleteTodo")
 	public ResponseEntity<?> deleteTodo(@RequestBody TodoDTO dto) {
 		try {
 			String tempraryUserId = "temporary-user";
