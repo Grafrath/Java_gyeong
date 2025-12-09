@@ -2,6 +2,7 @@ package com.example.Home.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,7 @@ public class TodoController {
 			
 			List<TodoEntity> entities = service.create(entity);
 			
-			List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+			List<TodoDTO> dtos = entities.stream().map( e -> new TodoDTO(e)).collect(Collectors.toList());
 			
 			ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
 			return ResponseEntity.ok().body(response);
