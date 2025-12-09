@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Ex_stream1 {
 	
@@ -14,7 +13,7 @@ public class Ex_stream1 {
 		List<String> names = List.of("철수","영희","민수");
 		
 		//스트림 생성
-		Stream<String> s_names = names.stream();
+		//Stream<String> s_names = names.stream();
 		
 		//중간연산
 		//filter - 조건에 맞는것만
@@ -50,6 +49,8 @@ public class Ex_stream1 {
 				.distinct()
 				.sorted()
 				.collect(Collectors.toList());
+		System.out.println(evenlist);
+		System.out.println("------------------");
 		
 		//Collectors에 들어있는 메소드
 		//toList() 리스트로 반환

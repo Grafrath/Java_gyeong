@@ -19,8 +19,6 @@ public class Main {
 		
 		User user1 = new User();
 		
-		//Supplier<User> user11 = name -> new User(name);
-		
 	}
 
 }
