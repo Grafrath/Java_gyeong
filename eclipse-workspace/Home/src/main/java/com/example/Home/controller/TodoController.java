@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("todo")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://127.0.0.1:3002")
 public class TodoController {
 	
 	private final TodoService service;
@@ -63,7 +65,7 @@ public class TodoController {
 			
 			List<TodoEntity> entities = service.create(entity);
 			
-			List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+			List<TodoDTO> dtos = entities.stream().map( e -> new TodoDTO(e)).collect(Collectors.toList());
 			
 			ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
 			return ResponseEntity.ok().body(response);
