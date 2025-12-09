@@ -7,6 +7,44 @@ document.addEventListener("DOMContentLoaded", () => {
     if (input && !input.hasAttribute("placeholder")) {
         input.setAttribute("placeholder", "할 일을 입력하세요");
     }
+
+    todos.forEach(todo => {
+        const li = document.createElement("li");
+        li.className = "todo-item";
+
+        const left = document.createElement("div");
+        left.className = "todo-left"
+        
+        const checkbox = document.createElement("input");
+        checkbox.type="checkbox";
+        checkbox.checked = todo.done;
+
+        const span = document.createElement("span")
+        span.className = "todo-text";
+        span.textContent = todo.title;
+
+        if (todo.done) {
+            span.classList.add("done");
+        }
+
+        checkbox.addEventListener("change", () => {
+            span.classList.toggle("done");
+        })
+
+        left.appendChild(checkbox);
+        left.appendChild(span)
+
+        const delbtn = document.createElement("button");
+        delbtn.className = "del-btn";
+        delbtn.textContent = "삭제";
+
+        delbtn.addEventListener("click", () => {});
+
+        li.appendChild(left);
+        li.appendChild(delbtn);
+
+        todoList.appendChild(li);
+    });
     
     async function addTodo() {
         const text = input.value.trim();
@@ -15,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return alert("내용을 입력하세요.");
         }
 
-        const response = await fetch("http://localhost:8080/todo/createtodo",
+        const response = await fetch("http://localhost:8080/todo/createTodo",
             {
                 method : "POST",
                 headers : {"Content-Type" : "application/json"},
@@ -26,14 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const result = await response.json();
         console.log(result.data);
-        
-        const li = document.createElement("li");
-        li.textContent = text;
-        
-        todoList.appendChild(li);
+
         input.value = "";
         
-        emptyText.style.display = "none";
     }
     
     input.addEventListener("keydown", (e) => {
