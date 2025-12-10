@@ -6,13 +6,14 @@ body {
     font-family: sans-serif;
     background-color: #f5f5f5;
     padding: 40px;
+    font-size: 16px;
 }
 
 .container {
     width: 100%;
     max-width: 480px;
     margin: auto;
-    background: #fff;
+    background: #f7fdff;
     padding: 20px 24px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -54,6 +55,7 @@ body {
     background: #3498db;
     color: #fff;
     cursor: pointer;
+    font-size: 16px; /* 현재 14px에서 15px로 약간 키우거나 원하는 크기로 조정 */
 }
 
 #add-btn:hover {
@@ -70,7 +72,7 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fafafa;
+    background: #dbdbdb;
     border: 1px solid #eee;
     padding: 10px;
     border-radius: 8px;
@@ -91,14 +93,39 @@ ul {
 .delete-btn {
     border: none;
     background: none;
-    color: #e74c3c;
+    color: #000000;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 5px 8px;
+    line-height: 1;
 }
 
 .empty-text {
     text-align: center;
     color: #888;
     margin-top: 20px;
+}
+
+.edit-input {
+    font-size: 14px;
+    padding: 0 5px;
+    margin: -2px 0;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.todo-item input[type="checkbox"] {
+    min-width: 18px;
+    height: 18px;
+}
+
+.todo-text {
+    /* 더블클릭 가능함을 사용자에게 알림 */
+    cursor: text;
+    /* 텍스트가 너무 길어질 경우 대비 */
+    word-break: break-word;
 }
 
 @media (max-width: 500px) {

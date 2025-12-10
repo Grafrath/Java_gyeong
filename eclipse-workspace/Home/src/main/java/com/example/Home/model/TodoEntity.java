@@ -23,4 +23,6 @@ public class TodoEntity {
 	
 	private String title;
 	private boolean done;
+	
+	private int itemOrder;
 }

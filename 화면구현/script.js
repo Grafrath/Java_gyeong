@@ -1,3 +1,34 @@
+async function updateOrderOnServer() {
+    const currentOrder = Array.from(todoList.children).map((li, index) => {
+        const id = parseInt(li.dataset.id);
+        const todo = todos.find(t => t.id === id);
+        
+        return {
+            id: id,
+            title: todo.title,
+            done: todo.done,
+            itemOrder: index + 1
+        };
+    });
+
+    try {
+        const response = await fetch("http://localhost:8080/todo/updateOrder", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(currentOrder)
+        });
+
+        if (!response.ok) throw new Error('순서 업데이트 실패');
+
+        const result = await response.json();[]
+        renderTodoList(result.data);
+    } catch (error) {
+        console.error("순서 업데이트 중 오류:", error);
+        alert("순서 업데이트에 실패했습니다. 목록을 새로고침합니다.");
+        loadTodos();
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const todoInput = document.querySelector("#todo-input");
     const addBtn = document.querySelector("#add-btn");
@@ -6,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const errorMessage = document.querySelector("#error-message");
 
     let todos = []
+    let sortableInstance = null;
 
     function checkEmptyState() {
         if (todos.length === 0) {
@@ -37,6 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
             span.className = "todo-text";
             span.textContent = todo.title;
 
+            span.addEventListener("dblclick", () => {
+                startEdit(li, span, todo);
+            });
+
             if (todo.done) {
                 span.classList.add("done");
             }
@@ -62,11 +98,22 @@ document.addEventListener("DOMContentLoaded", () => {
             todoList.appendChild(li);
         });
 
+        if (sortableInstance) {
+            sortableInstance.destroy();
+        }
+
+        sortableInstance = new Sortable(todoList, {
+            animation: 150,
+            handle: '.todo-left',
+            onEnd: function (evt) {
+                updateOrderOnServer();
+            },
+        });
     }
 
     async function loadTodos() {
         try {
-            const response = await fetch("http://localhost:8080/todo/retrieveTodoList");
+            const response = await fetch("http://localhost:8080/todo/getAll");
             const data = await response.json();
 
             if (data.data) {
@@ -108,12 +155,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function updateTodoStatus(id, done) {
+        const currentTodo = todos.find(t => t.id === id);
+        
+        if (!currentTodo) {
+            console.error("업데이트할 항목을 찾을 수 없습니다.");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:8080/todo/updateTodo", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    id: id,     // 업데이트 대상 ID 전송
+                    id: id,
+                    title: currentTodo.title,
                     done: done
                 })
             });
@@ -143,6 +198,71 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch (error) {
             console.error("할 일 삭제 중 오류 발생:", error);
+        }
+    }
+
+    function finishEdit(listItem, textSpan, editInput, todoItem) {
+        const newTitle = editInput.value.trim();
+
+        if (newTitle === "" || newTitle === todoItem.title) {
+            textSpan.textContent = todoItem.title;
+        } else {
+            textSpan.textContent = newTitle;
+            updateTodoTitle(todoItem.id, newTitle, todoItem.done);
+        }
+
+        editInput.remove();
+        textSpan.style.display = 'inline';
+    }
+
+    function startEdit(listItem, textSpan, todoItem) {
+        const editInput = document.createElement('input');
+        editInput.type = 'text';
+        editInput.className = 'edit-input';
+        editInput.value = todoItem.title;
+
+        textSpan.style.display = 'none';
+        textSpan.parentNode.insertBefore(editInput, textSpan);
+
+        editInput.focus();
+
+        editInput.addEventListener('blur', () => {
+            finishEdit(listItem, textSpan, editInput, todoItem);
+        });
+
+        editInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                editInput.blur();
+            }
+        });
+    }
+
+    async function updateTodoTitle(id, title, done) {
+        try {
+            const response = await fetch("http://localhost:8080/todo/updateTodo", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: id,
+                    title: title,
+                    done: done
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || '제목 업데이트에 실패했습니다.');
+            }
+
+            const result = await response.json();
+
+            if (result.data) {
+                renderTodoList(result.data);
+            }
+        } catch (error) {
+            console.error("제목 업데이트 중 오류 발생:", error);
+            alert(`업데이트 오류: ${error.message}`);
+            loadTodos();
         }
     }
 
