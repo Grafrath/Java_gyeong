@@ -32,7 +32,6 @@ public class ProductDTO {
 	
 	public static ProductEntity toEntity(ProductDTO dto) {
 		return ProductEntity.builder()
-				.id(dto.getId())
 				.name(dto.getName())
 				.stock(dto.getStock())
 				.price(dto.getPrice())
