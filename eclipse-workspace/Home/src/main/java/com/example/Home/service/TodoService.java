@@ -40,11 +40,6 @@ public class TodoService {
 			log.warn("Entity Title cannot be empty.");
 			throw new RuntimeException("Entity Title cannot be empty.");
 		}
-		
-		if(entity.getId() == 0) {
-			log.warn("Entity ID must be set for update or delete operations.");
-			throw new RuntimeException("Entity ID must be set.");
-		}
 	}
 	
 	public List<TodoEntity> create (TodoEntity entity) {		

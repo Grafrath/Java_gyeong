@@ -1,4 +1,4 @@
-package class_casting;
+package eaxm;
 
 public class Dog extends Animal {
 	
