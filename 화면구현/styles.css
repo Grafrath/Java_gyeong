@@ -9,7 +9,8 @@ body {
 }
 
 .container {
-    width: 480px;
+    width: 100%;
+    max-width: 480px;
     margin: auto;
     background: #fff;
     padding: 20px 24px;
@@ -31,7 +32,22 @@ body {
     font-size: 14px;
 }
 
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --border-color: #ddd;
+    --spacing-md: 10px;
+}
+
+#todo-input:focus,
+#add-btn:focus {
+    outline: 2px solid #3498db;
+    /* 포커스 아웃라인 추가 */
+    outline-offset: 2px;
+}
+
 #add-btn {
+    background: var(--primary-color);
     padding: 10px 16px;
     border: none;
     border-radius: 8px;
@@ -41,6 +57,7 @@ body {
 }
 
 #add-btn:hover {
+    background: var(--secondary-color);
     background: #2980b9;
 }
 
@@ -82,4 +99,14 @@ ul {
     text-align: center;
     color: #888;
     margin-top: 20px;
+}
+
+@media (max-width: 500px) {
+    body {
+        padding: 20px;
+    }
+
+    .container {
+        padding: 15px;
+    }
 }

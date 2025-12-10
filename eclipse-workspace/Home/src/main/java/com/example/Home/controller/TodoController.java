@@ -24,11 +24,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("todo")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://127.0.0.1:3002")
+@CrossOrigin(origins = "*")
 public class TodoController {
 	
 	private final TodoService service;
-	
+		
 	@GetMapping("/test1")
 	public ResponseEntity<?> testTodo () {
 		String str = service.test();
