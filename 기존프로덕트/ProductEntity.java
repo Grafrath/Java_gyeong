@@ -15,12 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="Todo")
-public class TodoEntity {
+@Table(name="Product")
+public class ProductEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	private String title;
-	private boolean done;
+	private long  id;
+	private String name;
+	private int price;
+	private int stock;
+	private String description;
 }

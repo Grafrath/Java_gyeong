@@ -23,68 +23,72 @@ public class TodoService {
 	}
 	
 	public String testService () {
-		TodoEntity entity = TodoEntity.builder().title("First").build();
-		repository.save(entity);
-		TodoEntity savedEntity = repository.findById(entity.getId()).get();
-		return  savedEntity.getTitle();
+		TodoEntity entity = TodoEntity.builder().title("First").done(true).build();
+		if (entity.isDone()) {
+			return "Test Service with DB Access";
+		}
+		return "Test Service with DB Access fail";
 	}
 	
-	private void validate (TodoEntity entity) {
+	private void validate (final TodoEntity entity) {
 		if(entity == null) {
 			log.warn("Entity cannot be null.");
 			throw new RuntimeException("Entity cannot be null");
 		}
 		
-		if(entity.getUserId() == null) {
-			log.warn("Unknown user");
-			throw new RuntimeException("Unknown user");
+		if(entity.getTitle() != null && entity.getTitle().trim().isEmpty()) {
+			log.warn("Entity Title cannot be empty.");
+			throw new RuntimeException("Entity Title cannot be empty.");
+		}
+		
+		if(entity.getId() == 0) {
+			log.warn("Entity ID must be set for update or delete operations.");
+			throw new RuntimeException("Entity ID must be set.");
 		}
 	}
 	
-	public List<TodoEntity> create (TodoEntity entity) {
+	public List<TodoEntity> create (TodoEntity entity) {		
 		validate(entity);
 		
 		repository.save(entity);
 		
-		log.info("Entity Id : {} is saved",entity.getId());
+		log.info("Entity Id : {} is saved by User Id: {}", entity.getId());
 		
-		return repository.findByUserIdQuery(entity.getUserId());
+		return retrieve();
 	}
 	
-	public List<TodoEntity> retrieve(String userId) {
-		return repository.findByUserIdQuery(userId);
+	public List<TodoEntity> retrieve() {
+		return repository.findAll();
 	}
 	
 	public List<TodoEntity> update(TodoEntity entity) {
-		//저장할 엔티티가 유효한지 확인한다.
 		validate(entity);
 		
-		//넘겨받은 엔티티 id를 이용해 TodoEntity를 가져온다.
-		//존재하지 않는 엔티티는 업데이트 할 수 없기 때문이다.
 		Optional<TodoEntity> original = repository.findById(entity.getId());
 		
 		original.ifPresent(todo -> {
-			//반환된 TodoEntity가 존재하면 값을 새 Entity값으로 덮어씌운다.
 			todo.setTitle(entity.getTitle());
 			todo.setDone(entity.isDone());
-			
-			//데이터베이스에 새 값을 저장한다.
 			repository.save(todo);
-			});
+		});
 		
-		return retrieve(entity.getUserId());
+		return retrieve();
 	}
 	
 	public List<TodoEntity> delete(TodoEntity entity) {
 		validate(entity);
+		
 		try {
-			repository.delete(entity);
+			Optional<TodoEntity> original = repository.findById(entity.getId());
+			
+			original.ifPresent(todo -> {
+				repository.delete(todo);
+			});
 		} catch (Exception e) {
-			log.error("error deleting entity ",entity.getId(),e);
+			log.error("error deleting entity {}", entity.getId(), e);
 			throw new RuntimeException("error deleting entity "+entity.getId());
 		}
 		
-		return retrieve(entity.getUserId());
-	}
-	
+		return retrieve();
+	}	
 }
