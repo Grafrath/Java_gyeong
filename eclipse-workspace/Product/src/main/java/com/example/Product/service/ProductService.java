@@ -68,6 +68,7 @@ public class ProductService {
 	
 	public ProductEntity create (ProductEntity entity) {
     	validate(entity);
+    	repository.save(entity);
 		
     	return repository.save(entity);
     }
@@ -108,5 +109,5 @@ public class ProductService {
 		
 		return response;
 	}
-
+	
 }

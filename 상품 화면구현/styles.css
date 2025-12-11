@@ -5,6 +5,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 20px;
     background-color: #f4f4f4;
+    /* ⭐️ body에 font-size 설정을 추가하여 기본 크기를 16px로 지정 (다른 요소들은 상속받거나 재정의됨) */
+    font-size: 16px;
 }
 
 .container {
@@ -48,11 +50,13 @@ h2 {
     align-items: center;
 }
 
+/* ⭐️ 입력창 폰트 크기 통일: 16px */
 .product-input-area input {
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
+    font-size: 16px;
 }
 
 .product-input-area input[type="text"] {
@@ -65,7 +69,7 @@ h2 {
     text-align: right;
 }
 
-/* 버튼 스타일 */
+/* 버튼 스타일 (버튼도 폰트 크기를 상속받지 않는 경우가 많아 명시적으로 16px 설정) */
 #add-product-btn {
     padding: 8px 15px;
     background-color: #4CAF50;
@@ -74,6 +78,8 @@ h2 {
     border: none;
     border-radius: 3px;
     white-space: nowrap;
+    font-size: 16px;
+    /* ⭐️ 버튼 폰트 크기 통일 */
 }
 
 #add-product-btn:hover {
@@ -87,11 +93,14 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+/* ⭐️ 테이블 헤더(th)와 데이터 셀(td) 폰트 크기 통일: 16px */
+th,
+td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
+    /* ⭐️ 14px에서 16px로 수정 */
 }
 
 th {
@@ -101,12 +110,15 @@ th {
 
 /* 삭제 버튼 스타일 */
 .delete-btn {
-    background-color: #f44336;
+    background-color: #fa5a5a;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 4px;
+    font-size: 16px;
+    /* ⭐️ 삭제 버튼 폰트 크기 통일 */
+
 }
 
 .delete-btn:hover {
@@ -119,6 +131,8 @@ th {
     padding: 3px;
     border: 1px solid #007bff;
     box-sizing: border-box;
+    font-size: 16px;
+    /* ⭐️ 수정 인풋 폰트 크기 통일 */
 }
 
 /* 상품명 셀 (더블클릭 영역) */
@@ -132,16 +146,18 @@ th {
     margin-bottom: 20px;
 }
 
+/* ⭐️ 검색창 폰트 크기 통일: 16px */
 #search-input {
     padding: 10px;
     width: 300px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 16px;
+    /* ⭐️ 검색창 폰트 크기 통일 */
 }
 
 /* ... (기존 스타일 유지) ... */
 
-/* ⭐️ 수정 가능한 셀 스타일 추가 */
 .editable-cell {
     cursor: pointer;
     position: relative;
@@ -153,15 +169,4 @@ th {
     text-align: right;
 }
 
-/* 수정 인풋 스타일 */
-.edit-input {
-    width: 90%;
-    padding: 3px;
-    border: 1px solid #007bff;
-    box-sizing: border-box;
-}
-
-#message {
-    margin-top: 10px;
-    font-weight: bold;
-}
+/* ... (나머지 스타일 유지) ... */
