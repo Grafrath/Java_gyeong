@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 관리 프로그램</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📦 상품 관리 프로그램</h1>
+        <div class="add-form-section">
+            <h3>상품 등록</h3>
+            <form id="addItemForm">
+                <input id="productName" name="productName" placeholder="상품 이름">
+                <input id="productStock" name="productStock" placeholder="상품 재고">
+                <input id="productPrice" name="productPrice" placeholder="상품 가격">
+                <button type="submit" class="btn-register">등록</button>
+            </form>
+            <div id="message"></div>
+        </div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>상품 번호</th>
+                    <th>상품 이름</th>
+                    <th>상품 재고</th>
+                    <th>상품 가격</th>
+                    <th>등록 날짜</th>
+                    <th>수정 날짜</th>
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+                <tr><td colspan="6">상품 목록 로딩 중...</td></tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>
+
+body{
+    margin : 20px;
+    background-color: #f4f4f4;
+}
+
+.container{
+    max-width: 900px;
+    margin : 0 auto;
+    padding : 20px;
+    background-color: white;
+    border-radius : 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    color : #333;
+    border-bottom : 2px solid #eee;
+    padding-bottom : 10px;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top : 20px;
+}
+
+th, td{
+    border : 1px solid #ddd;
+    padding : 10px;
+    text-align : center;
+    font-size : 14px;
+}
+
+th{
+    background-color: #007bff;
+    color: white;
+}
+
+/* 폼 스타일 */
+.add-form-section{
+    margin-bottom : 20px;
+    padding : 15px;
+    border : 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #e9ecef;
+}
+
+h3{
+    text-align: center;
+}
+
+#addItemForm{
+    display:flex;
+    justify-content: center;
+}
+
+.add-form-section input{
+    padding : 8px;
+    margin-right : 10px;
+    border : 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.btn-register{
+    padding : 8px 15px;
+    background-color: #28a745;
+    color : white;
+    border : none;
+    cursor : pointer;
+    border-radius: 3px;
+}
+
+/* 버튼에 마우스 올리면 
+색을 #1e7e34로 변경하기 */
+.add-product-btn:hover{
+    background-color: #1e7e34;
+}
+
+/* 상태 메시지 */
+#message{
+    margin-top : 10px;
+    font-weight : bold;
+}

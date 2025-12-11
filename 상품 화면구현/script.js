@@ -1,25 +1,22 @@
-const API_URL = "http://localhost:8080/product";
+const BASE_URL = "http://localhost:8080";
+const API_URL = BASE_URL +"/product";
 
-// DOM 요소 참조 (검색 필드 추가)
 const productListBody = document.querySelector("#product-list-body");
 const productNameInput = document.querySelector("#product-name");
 const productPriceInput = document.querySelector("#product-price");
 const productStockInput = document.querySelector("#product-stock");
 const addProductBtn = document.querySelector("#add-product-btn");
-// ⭐️ 검색 입력 필드 참조 추가
 const searchInput = document.querySelector("#search-input");
 
-// ----------------------------------------------------
-// 1. 목록 렌더링 함수 (수정 이벤트 리스너 확장)
-// ----------------------------------------------------
+// 목록 렌더링 함수
 function renderProductList(products) {
     productListBody.innerHTML = "";
 
     if (!products || products.length === 0) {
-        // ... 등록된 상품이 없습니다 로직 ...
+        // 등록된 상품이 없을경우
         const tr = productListBody.insertRow();
         const td = tr.insertCell();
-        td.colSpan = 6;
+        td.colSpan = 7;
         td.textContent = searchInput.value ? "검색 결과가 없습니다." : "등록된 상품이 없습니다.";
         td.style.textAlign = 'center';
         return;
@@ -31,32 +28,30 @@ function renderProductList(products) {
 
         tr.insertCell().textContent = product.id;
 
-        // 2. 상품명 셀 (수정 가능)
+        // 상품명 셀
         const nameCell = tr.insertCell();
         nameCell.className = 'editable-cell';
         nameCell.textContent = product.name;
         nameCell.addEventListener("dblclick", () => startEdit(nameCell, product, 'name'));
 
-        // ⭐️ 3. 가격 셀 (수정 가능)
+        // 가격
         const priceCell = tr.insertCell();
         priceCell.className = 'editable-cell price-cell';
         priceCell.textContent = product.price.toLocaleString() + "원";
-        // 원본 값을 저장하여 수정 로직에 사용
         priceCell.dataset.value = product.price;
         priceCell.addEventListener("dblclick", () => startEdit(priceCell, product, 'price'));
 
-        // ⭐️ 4. 재고 셀 (수정 가능)
+        // 재고
         const stockCell = tr.insertCell();
         stockCell.className = 'editable-cell stock-cell';
         stockCell.textContent = product.stock.toLocaleString();
-        // 원본 값을 저장하여 수정 로직에 사용
         stockCell.dataset.value = product.stock;
         stockCell.addEventListener("dblclick", () => startEdit(stockCell, product, 'stock'));
 
         const date = new Date(product.createTimeStamp);
         tr.insertCell().textContent = date.toLocaleDateString();
 
-        // 6. 버튼 컬럼 (삭제 버튼 로직 유지)
+        // 삭제 버튼
         const actionCell = tr.insertCell();
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "삭제";
@@ -70,9 +65,7 @@ function renderProductList(products) {
     });
 }
 
-// ----------------------------------------------------
-// 2. 전체 상품 목록 조회 또는 검색 (Read All / listByName)
-// ----------------------------------------------------
+// 전체 상품 목록 조회 또는 검색
 async function loadProducts(searchTerm = '') {
     let url = API_URL;
 
@@ -84,38 +77,28 @@ async function loadProducts(searchTerm = '') {
 
     try {
         const response = await fetch(url);
-        // ⭐️ 200 OK가 아니더라도 응답 본문(Body)을 먼저 읽습니다.
         const result = await response.json();
 
         if (!response.ok) {
-            // ⭐️ 400 Bad Request이면서 "상품을 찾을 수 없습니다." 에러인 경우를 구분합니다.
             if (response.status === 400 && result.error && result.error.includes("상품을 찾을 수 없습니다.")) {
-                // 검색 결과가 없을 뿐, 통신 오류는 아니므로 빈 목록을 렌더링하고 종료합니다.
                 renderProductList([]);
                 return;
             }
 
-            // 그 외의 모든 서버 에러 (500 Internal, 다른 종류의 400 Bad Request 등)
             console.error("서버 오류:", result.error);
-            // 오류 메시지를 포함하여 throw 하여 catch 블록에서 사용자에게 보여줍니다.
             throw new Error(result.error || "서버에서 알 수 없는 오류 발생");
         }
 
-        // 200 OK인 경우
         renderProductList(result.data);
 
     } catch (error) {
         console.error("네트워크 오류:", error);
-        // 구체적인 에러 메시지를 alert에 포함하여 사용자에게 보여줍니다.
         alert("API 통신 중 오류가 발생했습니다. 서버 상태를 확인해주세요: " + error.message);
     }
 }
 
-// ----------------------------------------------------
-// 3. 상품 추가 함수 (기존 로직 유지)
-// ----------------------------------------------------
+// 상품 추가 함수
 async function addProduct() {
-    // ... (기존 로직)
     const name = productNameInput.value.trim();
     const price = parseInt(productPriceInput.value);
     const stock = parseInt(productStockInput.value);
@@ -140,8 +123,6 @@ async function addProduct() {
         productPriceInput.value = "";
         productStockInput.value = "";
 
-        // 검색 중이더라도 새 항목 추가 후에는 전체 목록을 로드하는 것이 일반적
-        // 또는 검색 상태를 유지하며 로드: loadProducts(searchInput.value.trim());
         loadProducts();
 
     } catch (error) {
@@ -151,18 +132,15 @@ async function addProduct() {
 }
 
 
-// ----------------------------------------------------
-// 4. 상품 수정 시작 및 완료 (일반화)
-// ----------------------------------------------------
+// 상품 수정 시작 및 완료
 function startEdit(cell, product, fieldName) {
     if (cell.querySelector('.edit-input')) return;
 
-    // 현재 셀의 원본 값 가져오기
+    // 현재 항목의 원본 값 가져오기
     let originalValue;
     if (fieldName === 'name') {
         originalValue = product.name;
     } else {
-        // price나 stock일 경우 dataset.value에 저장된 숫자 값을 사용
         originalValue = parseInt(cell.dataset.value);
     }
 
@@ -170,10 +148,9 @@ function startEdit(cell, product, fieldName) {
     editInput.className = 'edit-input';
     editInput.value = originalValue;
 
-    // ⭐️ 필드 타입에 따라 입력 타입 설정
     if (fieldName === 'name') {
         editInput.type = 'text';
-    } else { // price or stock
+    } else {
         editInput.type = 'number';
         editInput.min = '0';
         editInput.style.textAlign = 'right';
@@ -191,27 +168,22 @@ function startEdit(cell, product, fieldName) {
 
         if (fieldName !== 'name') {
             newValue = parseInt(newValue);
-            // 숫자 유효성 검사
             if (isNaN(newValue) || newValue < 0) {
                 alert(`${fieldName}은(는) 0 이상의 숫자여야 합니다.`);
-                // 복구 후 재로드
-                loadProducts(searchInput.value);
+               loadProducts(searchInput.value);
                 return;
             }
         }
 
-        // 값이 변경되지 않았거나 입력이 비어있다면 복원
         if (newValue.toString() === originalValue.toString() || newValue === "") {
             cell.textContent = (fieldName === 'name')
                 ? originalValue
                 : originalValue.toLocaleString() + (fieldName === 'price' ? "원" : "");
         } else {
-            // ⭐️ 업데이트 함수 호출
-            await updateProduct(product.id, fieldName, newValue, product);
+           await updateProduct(product.id, fieldName, newValue, product);
         }
 
         editInput.remove();
-        // 변경 사항 반영을 위해 목록 재로드 (서버에서 최신 데이터 가져옴)
         loadProducts(searchInput.value.trim());
     };
 
@@ -219,9 +191,7 @@ function startEdit(cell, product, fieldName) {
     editInput.addEventListener('keydown', finishEdit);
 }
 
-// ----------------------------------------------------
-// 5. 상품 정보 업데이트 API 호출 (PUT /product/update)
-// ----------------------------------------------------
+// 상품 정보 업데이트
 async function updateProduct(id, fieldToUpdate, newValue, originalProduct) {
     const updatedProduct = {
         id: id,
@@ -230,7 +200,6 @@ async function updateProduct(id, fieldToUpdate, newValue, originalProduct) {
         stock: originalProduct.stock
     };
 
-    // 변경된 필드만 새로운 값으로 업데이트
     updatedProduct[fieldToUpdate] = newValue;
 
     try {
@@ -244,23 +213,16 @@ async function updateProduct(id, fieldToUpdate, newValue, originalProduct) {
             const errorResult = await response.json();
             throw new Error(errorResult.error || "상품 수정 실패");
         }
-
-        // 성공적으로 수정되면 목록을 다시 로드 (loadProducts에서 이미 처리됨)
-
     } catch (error) {
         console.error("상품 수정 중 오류 발생:", error);
         alert(`상품 수정에 실패했습니다: ${error.message}`);
-        // 오류 시 원래 상태로 복원하기 위해 목록 재로드
         loadProducts(searchInput.value.trim());
     }
 }
 
 
-// ----------------------------------------------------
-// 6. 상품 삭제 함수 (기존 로직 유지)
-// ----------------------------------------------------
+// 상품 삭제
 async function deleteProduct(id) {
-    // ... (기존 로직)
     try {
         const response = await fetch(`${API_URL}/delete/${id}`, {
             method: "DELETE",
@@ -277,7 +239,6 @@ async function deleteProduct(id) {
         } else {
             throw new Error(result.error || "알 수 없는 오류로 삭제 실패");
         }
-
     } catch (error) {
         console.error("상품 삭제 중 오류:", error);
         alert("상품 삭제에 실패했습니다: " + error.message);
@@ -286,32 +247,19 @@ async function deleteProduct(id) {
 }
 
 
-// ----------------------------------------------------
-// 7. 초기화 및 이벤트 리스너 등록
-// ----------------------------------------------------
+// 초기화
 document.addEventListener("DOMContentLoaded", () => {
     addProductBtn.addEventListener("click", addProduct);
-
-    // ⭐️ 수정된 부분: input 이벤트를 keydown 이벤트로 변경하고 Enter 키를 확인합니다.
     searchInput.addEventListener("keydown", (e) => {
-        // 1. 눌린 키가 'Enter'인지 확인합니다.
         if (e.key === 'Enter') {
-            e.preventDefault(); // 기본 동작(폼 제출 등)을 방지합니다.
-
-            // 2. 검색 함수를 호출합니다.
+            e.preventDefault();
+            
             loadProducts(searchInput.value.trim());
-
-            // 3. 엔터 입력 후 포커스 이동 (선택 사항)
+            
             searchInput.blur();
         }
     });
-    // (선택 사항: 기존의 'input' 이벤트 리스너가 남아 있다면 제거해주세요.)
-    /*
-    searchInput.addEventListener("input", () => {
-        loadProducts(searchInput.value.trim()); // 이 코드는 이제 제거됩니다.
-    });
-    */
 
-    // 페이지 로드 시 상품 목록 조회
     loadProducts();
+
 });
