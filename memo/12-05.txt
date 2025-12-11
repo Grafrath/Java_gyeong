@@ -1,0 +1,192 @@
+레이어드 아키텍처를 사용하고 있다.
+
+사용자는 서버의 url을 통해서 api에 접근하게 된다.
+get,post,put,delete -> 요청의 행위
+서버쪽에서도 url을 만들 때 고유명사로 지어야한다.
+
+GET /users -> 전체 유저목록 조회하기
+
+GET /posts -> 전체 게시글 조회하기
+
+전체 -> 세부범위
+
+Get /user/1/posts -> id가 1인 유저의 전체 게시글
+
+표현계층 -> Controller
+클래스의 이름을 Controller로 짓는다고 컨트롤러가 되는게 아님
+@Controller 어노테이션
+@RestController 어노테이션
+
+요청이 들어오면 해당 메서드가 실행되고 결과를 반환한다.
+
+
+비즈니스 계층
+비즈니스 로직을 작성
+ex) 쇼핑몰(재고가 0이면 주문을 막아야한다, 10개 이상 주문하면 10%할인해준다, 5만원 이상 주문하면 배송비 무료)
+ex) 회원(id는 중복되면 안된다, 탈퇴했으면 로그인 못하게 해야한다)
+
+영속계층
+
+Model 데이터가 들어올 때 담기위한 객체
+ㄴ DTO : 클라이언트와 서버, 계층간 이동시 데이터를 담기위한 객체(Entity를 노출하면 DB의 스키마를 노출하는것과 같아서 보여주고싶지 않은 내용을 제외할 수 있다.)
+ㄴ Entity : 서버 <-> DB간 데이터를 주고받을 때 사용하기 위한 객체(테이블 1개와 1:1관계)
+
+@Component -> 부모 어노테이션
+ㄴ @Controller (@RestController -> @Controller + @ResponseBody)
+ㄴ @Service
+ㄴ @Repository
+
+SOLID원칙
+
+1. 단일 책임의 원칙 (Single Responsibility Principle)
+하나의 클래스는 하나의 기능만 가져야 한다.
+하나의 클래스에 기능 섞어두면
+수정할 때 너무 힘들다
+테스트하기 힘들다
+가독성이 떨어진다.
+
+2. 개방 폐쇄의 원칙(Open Close Principle)
+기능 확장에는 열려있고, 코드 수정에는 닫혀있다
+새로운 요구사항이 생기면 기존 코드는 최대한 건드리지 않고, 수정을 최소화 하는것이 좋다.
+상속, 구현을 통해서 확장하는 방향으로 해야한다.
+
+서비스 로직은 웬만하면 수정하지 않는 쪽으로 하는게 좋다.
+
+3. 리스코프 치환 원칙(Likov Substitution Principle)
+부모 타입 객체를 사용하는 곳에, 자식 타입 객체를 넣어도 정상적으로 동작해야 한다.
+(다형성 잘 활용하세요!)
+
+4. 인터페이스 분리 원칙(Interface Segregation Principle)
+덩치 큰 인터페이스 하나보다, 작은 인터페이스 여러 개로 나누는게 낫다.
+
+5. 의존 역전의 원칙(Dependency Inversion Principle)
+구현체는 바뀌어도 인터페이스는 유지해라
+
+개발을 할 때 범용성이 좋게 설계를 하는게 좋다.
+확장을 염두해두고 개발을 하는게 좋다.
+확장이 되도 핵심 로직은 크게 수정이 안되는 방향으로...
+
+모듈화
+
+결합도를 낮추고 응집도를 높여라! -> 결약응강
+
+
+서버를 실행
+스프링부트가 @Component 가 달려있는 클래스를 스캔해서(ComponentScan) Map 형태로 객체를 컨테이너에 저장한다. {todoController=new TodoController(), todoService =new TodoService()}
+
+의존성 주입 방법
+
+1. 필드주입
+@Autowired를 붙여서 주입
+필드에 final을 못써서 불변성을 보장하지 못한다.
+
+테스트할 때 컨트롤러 객체를 직접(new todoController())만들게 되면 service가 null이라서 순수 자바 테스트가 불편하다.
+
+
+2. 생성자 주입
+- 스프링에서 가장 권장하는 방식
+final을 쓸 수 있어서 의존성이 반드시 필요함을 명확히 표현할 수 있다.
+
+@RequiredArgsConstructor를 이용해서 생성자 주입을 깔끔하게 할 수 있다.
+
+
+3. setter주입
+setter를 public으로 열어두면 외부에서 의도치 않게 다른 객체를 다시 넣어버릴수도 있다.
+객체 생명주기 중간에 의존성이 바뀔 수 있어서 코드 추적이 힘들어질 수 있다.
+
+표현 계층
+controller
+서비스 계층  DTO
+service
+영속계층 
+repository    Entity
+db
+
+Todo 서비스 만들기
+스프링 JPA를 기반으로 생성, 검색, 수정, 삭제 API를 만들어보자
+
+사용자 		->	todoController	->	todoService	->	DB
+(할일을 입력)	->    todoDTO -> todoEntity
+
+사용자 		<-	todoController	<-	todoService	<-	DB
+(조회된 데이터)	<-    todoDTO <- todoEntity
+
+
+상품관리 프로젝트
+gruop id : com.korea
+artifact : product
+
+SpringWeb
+devTools
+jpa
+h2
+lombok
+
+controller
+ProductController
+@PostMapping("create")
+- 요청을 DTO로 받는다. -> 사용자 입장에서 추가하고싶은 데이터를 전달
+- 서비스의 createProduct()를 호출한다 -> 서비스계층으로 가서 비즈니스 로직을 실행하고 결과를 받아오는것
+- 결과로 저장된 상품을 DTO로 반환한다. -> 결과를 사용자에게 다시 보여주는것
+
+service
+ProductService
+- 상품 등록 로직을 작성한다.
+- name이 null 또는 빈 문자열이면 예외 발생
+- price < 0 예외
+- stock <0 예외
+- 검증에 통과하면 Repository를 이용해 저장
+
+persistence
+ProductRepository
+- JpaRepository<> 상속
+- 추가메서드는 필요 없음
+
+ProductEntity
+- int id pk, 자동증가
+- String name
+- int price
+- int stock
+- String description
+
+ProductDTO
+- int id
+- String name
+- int price
+- int stock
+- String description
+
+{
+  "name": "게이밍 마우스",
+  "price": 35000,
+  "stock": 20,
+  "description": "RGB 지원 무선 마우스"
+}
+
+{
+  "id":"xxxxxx",
+  "name": "게이밍 마우스",
+  "price": 35000,
+  "stock": 20,
+  "description": "RGB 지원 무선 마우스"
+}
+
+
+List<sdf> list = new ArrayList<>(set);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

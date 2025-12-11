@@ -1,0 +1,149 @@
+스프링부트 12월 12일
+- 프로젝트 구성
+- 패키지 나누는거
+- CRUD 기능 만드는거
+
+자바 12월 10일 결석자,재시험
+
+스프링 프로젝트를 실행해서 서버를 돌리면 
+@SpringBootApplication에 있는 @ComponentScan이 자신을 포함한 하위패키지를 탐색하면서
+@Component
+@RestController or @Controller
+@Service
+@Repository
+어노테이션이 붙은 클래스를 빈(bean)으로 만들어서 메모리에 올려놓고 시작을 한다.(싱글톤으로 올린다.)
+
+
+
+
+
+
+
+의존성 주입
+
+1. @Autowired 필드주입
+
+2. setter주입
+
+3. 생성자 주입
+
+스프링부트 <-> JPA <-> H2(MySQL)
+
+JPA가 Entity로 dB와 연결을 한다.
+1개의 Entity클래스가 1개의 테이블이랑 1:1관계를 가진다.
+
+@Entity
+class UserEntity{
+    private String name;
+    private int age;
+}
+
+create table User{
+    name varchar(50) primary key,
+    age INTEAGER
+}
+
+Optional -> JPA를 쓸 때 조회 결과가 있을 수도 있고 없을 수도 있다.
+결과를 깔끔하게 표현하기 위한 타입이다.
+
+결과가 없어서 null인데 깜빡하고 체크를 안하면 NullPointerException이 발생한다.
+null 올 수도 있다를 생각하고 작성할 수 있다.
+
+기본제공 메서드 중 Optional<T> findById(String id)
+
+값이 있는지 확인 
+isPresent() : 값이 있으면 true, 없으면 false
+get() : 값이 있을 때 꺼낸다.(값이 없는데 꺼내면 NoSuchElementException이 발생한다.)
+
+orElseThrow : 없으면 예외 발생, 있으면 값을 반환
+
+사용자의 정보를 관리하는 사용자 관리 시스템 프로그램 만들기
+groupID : com.korea
+artifact : user
+
+필요 라이브러리
+Spring Web
+h2
+lombok
+jpa
+
+com.korea.user.model
+UserEntity
+- id,name,email 필드를 갖는다.
+int id -> pk 값 자동생성 전략 GenerationType.Auto
+String name
+String email
+
+com.korea.user.dto
+UserDTO
+- int id
+- String name
+- String email
+
+생성자를 통해 Entity 객체를 DTO객체로 변환
+
+DTO객체를 Entity로 바꾸는 toEntity메서드
+
+com.korea.user.repository
+UserRepository
+- JpaRepository를 상속받는다.
+- 이메일을 통해 유저를 찾는 findByEmail추상메서드 추가하기
+(반환 타입은 UserEntity)
+
+com.korea.user.service
+UserService
+
+사용자를 생성하는 create메서드 생성하기
+- 추가 후 모든 사용자 반환하기
+
+
+com.korea.user.controller
+UserController
+
+유저를 추가하는 createUser메서드
+HTTP 메서드 : POST
+
+모든 사용자 조회
+UserService
+getAllUsers() 메서드 만들기
+
+UserController
+메서드명
+getAllUsers()
+HTTP메서드 : GET
+
+이메일을 통한 사용자 검색
+UserService
+getUserByEmail() 메서드 만들기
+
+UserController
+HTTP메서드 : GET
+메서드명 : getUserByEmail
+리소스 : /{email}
+
+ID를 통해 이름과 이메일 수정하기
+UserService
+getUserByEmail() 메서드 생성하기
+
+UserController
+http메서드 : put
+메서드명 : updateUser
+
+삭제하기
+ID를 가지고 유저를 삭제하는 기능 만들기
+UserService
+메서드명 deleteUser
+사용자가 존재하는지 확인
+삭제 되면 true, 삭제 안되면 false를 반환
+UserController
+HTTP메서드 : DELETE
+메서드명 : deleteUser
+리소스 : /{id}
+삭제에 성공하면 "User deleted successfully"
+실패하면 .status(404).body("user not found with id " + id)
+
+
+
+
+
+

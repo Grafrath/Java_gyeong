@@ -1,4 +1,4 @@
-package com.korea.Product.model;
+package com.example.Product.model;
 
 import java.time.LocalDateTime;
 
@@ -24,15 +24,15 @@ import lombok.NoArgsConstructor;
 public class ProductEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long  id;
+	private int  id;
 	private String name;
 	private int price;
 	private int stock;
 	
 	@CreationTimestamp
-	private LocalDateTime createTimeStamp;
+	private LocalDateTime createTime;
 	@UpdateTimestamp
-	private LocalDateTime updateTimeStamp;
+	private LocalDateTime updateTime;
 }
 /*
 서비스계층 만들기

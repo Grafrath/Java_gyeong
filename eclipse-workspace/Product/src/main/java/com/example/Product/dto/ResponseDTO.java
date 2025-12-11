@@ -1,4 +1,4 @@
-package com.korea.Product.dto;
+package com.example.Product.dto;
 
 import java.util.List;
 

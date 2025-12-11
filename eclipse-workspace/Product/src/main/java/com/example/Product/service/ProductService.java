@@ -1,12 +1,15 @@
-package com.korea.Product.service;
+package com.example.Product.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.korea.Product.model.ProductEntity;
-import com.korea.Product.persistence.ProductRepository;
+import com.example.Product.dto.ProductDTO;
+import com.example.Product.dto.ResponseDTO;
+import com.example.Product.model.ProductEntity;
+import com.example.Product.persistence.ProductRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +50,7 @@ public class ProductService {
 	}
 	
 	//ID로 단일 조회 
-	public ProductEntity listOne(long id) {
+	public ProductEntity listOne(int id) {
 		return repository.findById(id)
 				.orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 	}
@@ -83,7 +86,7 @@ public class ProductService {
 		return original;
 	}
 	
-	public List<ProductEntity> delete(long id) {
+	public List<ProductEntity> delete(Integer id) {
 		Optional<ProductEntity> product = repository.findById(id);
 		
 		if (product.isEmpty()) {
@@ -92,6 +95,18 @@ public class ProductService {
 		
 		repository.deleteById(id);
 		return repository.findAll();
+	}
+	
+	public ResponseDTO<ProductDTO> resopon (List<ProductEntity> entity) {
+		List<ProductDTO> dto = entity.stream()
+				.map(ProductDTO::new)
+				.collect(Collectors.toList());
+		ResponseDTO<ProductDTO> response = ResponseDTO
+				.<ProductDTO>builder()
+				.data(dto)
+				.build();
+		
+		return response;
 	}
 
 }

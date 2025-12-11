@@ -1,13 +1,13 @@
-package com.korea.Product.persistence;
+package com.example.Product.persistence;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.korea.Product.model.ProductEntity;
+import com.example.Product.model.ProductEntity;
 
 @Repository
-public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
 	List<ProductEntity> findByName(String name);
 }

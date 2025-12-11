@@ -1,8 +1,8 @@
-package com.korea.Product.dto;
+package com.example.Product.dto;
 
 import java.time.LocalDateTime;
 
-import com.korea.Product.model.ProductEntity;
+import com.example.Product.model.ProductEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ProductDTO {
-	private long  id;
+	private int  id;
 	private String name;
 	private int price;
 	private int stock;
@@ -26,8 +26,8 @@ public class ProductDTO {
 		this.name = entity.getName();
 		this.stock = entity.getStock();
 		this.price = entity.getPrice();
-		this.createTimeStamp = entity.getCreateTimeStamp();
-		this.updateTimeStamp = entity.getUpdateTimeStamp();
+		this.createTimeStamp = entity.getCreateTime();
+		this.updateTimeStamp = entity.getUpdateTime();
 	}
 	
 	public static ProductEntity toEntity(ProductDTO dto) {
