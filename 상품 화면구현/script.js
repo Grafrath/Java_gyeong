@@ -1,5 +1,6 @@
 import { productApi } from './api.js';
 import * as UI from './ui.js';
+import { createOrder, loadOrders } from './orderScript.js';
 
 // 전체 목록 조회 또는 상품명 검색
 async function loadProducts(searchItem = '') {

@@ -11,6 +11,7 @@
     <body>
         
         <div class="container">
+
             <h1>📦 상품 재고 관리</h1>
 
             <h2>상품 검색</h2>
@@ -34,9 +35,9 @@
                 <thead>
                     <tr>
                         <th>상품 번호</th>
-                        <th>상품 이름</th>
-                        <th>상품 가격</th>
-                        <th>상품 재고</th>
+                        <th>상품명</th>
+                        <th>가격</th>
+                        <th>재고</th>
                         <th>등록 날짜</th>
                         <th>수정 날짜</th>
                         <th>제거</th>
@@ -48,7 +49,51 @@
                     </tr>
                 </tbody>
             </table>
+
+            <section id="Buy-section" class="mt-4">
+                <h2>📠주문 가능 상품 목록</h2>
+                <div class="Buy-Request">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>상품 번호</th>
+                                <th>상품명</th>
+                                <th>가격</th>
+                                <th>재고</th>
+                                <th>구매 수량</th>
+                                <th>주문 가격</th>
+                                <th>구매</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Buy-list-body">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="order-section" class="mt-4">
+                <h2>📦 주문 목록</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th>주문 번호</th>
+                                <th>상품 번호</th>
+                                <th>상품명</th>
+                                <th>주문 수량</th>
+                                <th>주문 가격</th>
+                                <th>주문 시간</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-list-body">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
         </div>
-    
+
+        
+    <script type="module" src="orderScript.js"></script>
     </body>
 </html>

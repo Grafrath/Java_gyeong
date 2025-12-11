@@ -10,4 +10,5 @@ import com.example.Product.model.ProductEntity;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
 	List<ProductEntity> findByName(String name);
+	List<ProductEntity> findByNameOrderByIdDesc(String name);
 }

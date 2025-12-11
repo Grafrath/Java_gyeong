@@ -2,6 +2,8 @@ package com.example.Product.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="product_order")
+@Table(name="OrderItem")
 public class OrderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +31,9 @@ public class OrderEntity {
 	@JoinColumn(name = "product_id") // Order 테이블의 외래 키 컬럼명
 	private ProductEntity product;
 	
-	private int count;
-	private int totalprice;
-	private LocalDateTime orderdate;
+	private int quantity;
+	private int orderTotalPrices;
+	
+	@CreationTimestamp
+	private LocalDateTime orderTime;
 }

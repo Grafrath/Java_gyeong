@@ -2,13 +2,10 @@ package com.example.Product.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.Product.dto.ProductDTO;
-import com.example.Product.dto.ResponseDTO;
 import com.example.Product.model.ProductEntity;
 import com.example.Product.persistence.ProductRepository;
 
@@ -58,7 +55,7 @@ public class ProductService {
 	
 	//상품명으로 단일 조회
 	public List<ProductEntity> listByName(String name) {
-		List<ProductEntity> products = repository.findByName(name);
+		List<ProductEntity> products = repository.findByNameOrderByIdDesc(name);
 		
 		if (products.isEmpty()) {
 			throw new RuntimeException("상품을 찾을 수 없습니다.");
@@ -67,6 +64,7 @@ public class ProductService {
 		return products;
 	}
 	
+	@Transactional
 	public ProductEntity create (ProductEntity entity) {
     	validate(entity);
 		
@@ -87,6 +85,7 @@ public class ProductService {
 		return original;
 	}
 	
+	@Transactional
 	public List<ProductEntity> delete(Integer id) {
 		Optional<ProductEntity> product = repository.findById(id);
 		
