@@ -6,9 +6,7 @@ async function loadProducts(searchItem = '') {
     UI.showLoadingStatus();
     try {
         const products = await productApi.loadProducts(searchItem);
-        // 역순 조회
-        const reversedProducts = [...products].reverse();
-        UI.renderProductList(reversedProducts, deleteProduct, startEditHandler, searchItem);
+        UI.renderProductList(products, deleteProduct, startEditHandler, searchItem);
     } catch (error) {
         UI.showErrorStatus(error.message, searchItem);
 

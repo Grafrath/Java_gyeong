@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.Product.dto.ProductDTO;
@@ -46,7 +47,7 @@ public class ProductService {
 	
 	//전체 조회
 	public List<ProductEntity> listAll () {
-		return repository.findAll();
+		return repository.findAll(Sort.by(Sort.Direction.DESC, "createTime"));
 	}
 	
 	//ID로 단일 조회 
@@ -68,7 +69,6 @@ public class ProductService {
 	
 	public ProductEntity create (ProductEntity entity) {
     	validate(entity);
-    	repository.save(entity);
 		
     	return repository.save(entity);
     }
@@ -96,18 +96,6 @@ public class ProductService {
 		
 		repository.deleteById(id);
 		return repository.findAll();
-	}
-	
-	public ResponseDTO<ProductDTO> resopon (List<ProductEntity> entity) {
-		List<ProductDTO> dto = entity.stream()
-				.map(ProductDTO::new)
-				.collect(Collectors.toList());
-		ResponseDTO<ProductDTO> response = ResponseDTO
-				.<ProductDTO>builder()
-				.data(dto)
-				.build();
-		
-		return response;
 	}
 	
 }
