@@ -21,14 +21,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="OrderItem")
+@Table(name="Orders")
 public class OrderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderId;
 	
 	@ManyToOne
-	@JoinColumn(name = "product_id") // Order 테이블의 외래 키 컬럼명
+	@JoinColumn(name = "product_id", nullable = false) // Order 테이블의 외래 키 컬럼명
 	private ProductEntity product;
 	
 	private int quantity;

@@ -31,29 +31,15 @@ public class OrderController {
 	@GetMapping("/listAll")
 	public ResponseEntity<?> listAllOrders() {
 		try {
-			List<OrderEntity> list = service.listAllOrders();
+			List<OrderResponseDTO> dtos = service.listAllOrders();
 			
-			return toResponseDTO(list);
+			return toResponseDTO(dtos);
 		} catch (Exception e) {
 			return errorResponse(e);
 		}
 	}
 	
-	@GetMapping("/listOne/{orderId}")
-	public ResponseEntity<?> listOneOrder(@PathVariable("orderId") int orderId) {
-		try {
-			OrderEntity entity = service.listOneOrder(orderId);
-			
-			return toResponseDTO(entity);
-		} catch (Exception e) {
-			return errorResponse(e);
-		}
-	}
-	
-	private ResponseEntity<ResponseDTO<?>> toResponseDTO(List<OrderEntity> entities) {
-		List<OrderResponseDTO> dtos = entities.stream()
-				.map(OrderResponseDTO::new)
-				.collect(Collectors.toList());
+	private ResponseEntity<ResponseDTO<?>> toResponseDTO(List<OrderResponseDTO> dtos) {
 		
 		ResponseDTO<OrderResponseDTO> response = ResponseDTO.<OrderResponseDTO>builder().data(dtos).build();
 		return ResponseEntity.ok().body(response);

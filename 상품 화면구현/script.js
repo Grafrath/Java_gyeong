@@ -7,12 +7,19 @@ async function loadProducts(searchItem = '') {
     UI.showLoadingStatus();
     try {
         const products = await productApi.loadProducts(searchItem);
+
+        // 상품 목록
         UI.renderProductList(products, deleteProduct, startEditHandler, searchItem);
+
+        // 주문 가능 상품 목록
+        UI.renderBuyList(products, createOrderHandler);
+
     } catch (error) {
         UI.showErrorStatus(error.message, searchItem);
 
         if (error.status === 400 && error.message.includes("상품을 찾을 수 없습니다.")) {
             UI.renderProductList([], deleteProduct, startEditHandler, searchItem);
+            UI.renderBuyList([], createOrderHandler);
             return;
         }
         console.error("API 통신 오류:", error);
@@ -36,12 +43,21 @@ async function addProduct() {
         const resultData = await productApi.addProduct(newProduct);
         const savedProduct = resultData[0];
 
-        UI.productNameInput.value = "";
-        UI.productPriceInput.value = "";
-        UI.productStockInput.value = "";
+        if (!savedProduct) {
+            console.error("상품 등록은 성공했으나 응답 데이터가 비어있습니다.");
+            await loadProducts(); // 데이터 문제 시 전체 재로딩
+            return;
+        }
 
         console.log("새로 등록된 상품 정보:", savedProduct);
-        await loadProducts();
+
+        // 1. 상품 목록 갱신 (즉시 렌더링)
+        UI.renderSingleProductRow(savedProduct, deleteProduct, startEditHandler);
+
+        // 2. 주문 가능 상품 목록 갱신 (전체 상품 목록을 다시 불러와 갱신)
+        const allProducts = await productApi.loadProducts(UI.searchInput.value.trim());
+        UI.renderBuyList(allProducts, createOrderHandler);
+
     } catch (error) {
         console.error("상품 추가 중 오류:", error);
         alert("상품 추가에 실패했습니다: " + error.message);
@@ -69,9 +85,10 @@ async function updateProduct(id, fieldToUpdate, newValue, originalProduct) {
 
 async function deleteProduct(id) {
     try {
-        const remainingProducts = await productApi.deleteProduct(id);
+        await productApi.deleteProduct(id);
         alert("상품이 삭제되었습니다.");
-        UI.renderProductList(remainingProducts, deleteProduct, startEditHandler, UI.searchInput.value.trim());
+        // 삭제 후, 상품 목록과 주문 가능 목록을 모두 갱신
+        await loadProducts(UI.searchInput.value.trim());
     } catch (error) {
         console.error("상품 삭제 중 오류:", error);
         alert("상품 삭제에 실패했습니다: " + error.message);
@@ -83,8 +100,30 @@ function startEditHandler(cell, product, fieldName) {
     UI.startEdit(cell, product, fieldName, updateProduct, loadProducts);
 }
 
+// 주문 생성
+function createOrderHandler(productId, quantityInput) {
+    const quantity = parseInt(quantityInput.value);
+
+    if (isNaN(quantity) || quantity <= 0) {
+        alert("구매 수량은 1개 이상으로 정확하게 입력해주세요.");
+        return;
+    }
+
+    createOrder(productId, quantity)
+        .then(() => {
+            loadProducts(UI.searchInput.value.trim());
+            loadOrders();
+        })
+        .catch(error => {
+            alert(`주문 실패: ${error.message}`);
+        });
+}
+
 // 초기화
 document.addEventListener("DOMContentLoaded", async () => {
+    // ⭐️ Live Preview 문제 회피를 위해 'load' 이벤트로 변경 가능 ⭐️
+    // window.addEventListener("load", async () => { ... } );
+
     UI.addProductBtn.addEventListener("click", addProduct);
     UI.searchInput.addEventListener("keydown", (e) => {
         if (e.key === 'Enter') {
@@ -95,4 +134,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     await loadProducts();
+    await loadOrders();
 });

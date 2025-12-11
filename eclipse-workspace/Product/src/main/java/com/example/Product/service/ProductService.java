@@ -97,4 +97,27 @@ public class ProductService {
 		return repository.findAll();
 	}
 	
+	@Transactional
+	public boolean decreaseStock(int productId, int quantity) {
+		if (quantity <= 0) {
+			throw new IllegalArgumentException("주문 수량은 1개 이상이어야 합니다.");
+		}
+		
+		int updatedRows = repository.decreaseStock(productId, quantity);
+		
+		if (updatedRows == 0) {
+			log.warn("재고 차감 실패: Product ID: {}, Requested Quantity: {}", productId, quantity);
+			
+			Optional<ProductEntity> product = repository.findById(productId);
+			
+			if (product.isEmpty()) {
+				throw new RuntimeException("주문하려는 상품을 찾을 수 없습니다. (ID: " + productId + ")");
+			} else {
+				throw new RuntimeException("재고가 부족하여 주문할 수 없습니다. 현재 재고: " + product.get().getStock());
+			}
+		}
+		
+		return true;
+	}
+	
 }

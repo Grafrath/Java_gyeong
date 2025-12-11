@@ -1,41 +1,29 @@
-import { orderApi } from './orderApi.js';
-import { renderOrderList, orderListBody } from './orderUi.js';
+import { orderApi } from './api.js';
 import * as UI from './ui.js';
 
-// 1. 주문 목록 조회 및 렌더링
+export async function createOrder(productId, quantity) {
+    try {
+        const order = await orderApi.createOrder(productId, quantity);
+        alert(`주문 성공! [${order.productName}] ${order.quantity}개, 총 ${order.orderTotalPrices.toLocaleString()}원.`);
+
+        // 성공 시, 호출한 곳(script.js)에서 재고 및 주문 목록을 새로고침합니다.
+        return order;
+    } catch (error) {
+        console.error("주문 생성 오류:", error);
+        // OrderService에서 발생한 재고 부족, 유효성 검증 오류 메시지를 사용자에게 표시
+        // script.js에서 이 에러를 catch하여 alert합니다.
+        throw new Error(error.message);
+    }
+}
+
+// 주문 목록 조회링
 export async function loadOrders() {
     try {
-        UI.showLoadingStatus();
         const orders = await orderApi.loadOrders();
-        renderOrderList(orders);
+        UI.renderOrderList(orders);
     } catch (error) {
-        UI.showErrorStatus(error.message);
+        console.error("주문 목록 로드 오류:", error);
+        UI.renderOrderList([]); // 오류 시 목록 비우기
+        UI.showErrorStatus(error.message); // 에러 상태 메시지 표시
     }
 }
-
-// 2. 주문 등록 함수 (상품 목록에서 호출될 예정)
-export async function createOrder(productId, quantity) {
-    if (quantity <= 0) {
-        alert("주문 수량은 1개 이상이어야 합니다.");
-        return;
-    }
-
-    if (confirm(`상품 ID [${productId}]를 ${quantity}개 주문하시겠습니까?`)) {
-        try {
-            const orderRequest = { productId, quantity };
-            
-            await orderApi.createOrder(orderRequest);
-            alert("✅ 주문이 성공적으로 처리되었습니다. 재고가 차감되었습니다.");
-            
-            loadOrders();
-
-        } catch (error) {
-            console.error("주문 실패:", error);
-            alert(`❌ 주문 실패: ${error.message}`);
-        }
-    }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    loadOrders();
-});

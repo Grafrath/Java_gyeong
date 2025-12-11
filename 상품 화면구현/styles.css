@@ -1,16 +1,13 @@
-/* styles.css */
-
-/* 기본 레이아웃 및 폰트 */
+/* 기본 레이아웃 */
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
     background-color: #f4f4f4;
-    /* ⭐️ body에 font-size 설정을 추가하여 기본 크기를 16px로 지정 (다른 요소들은 상속받거나 재정의됨) */
     font-size: 16px;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: white;
@@ -24,15 +21,15 @@ h1 {
     padding-bottom: 10px;
 }
 
-h3 {
-    text-align: center;
-}
-
-/* 제목 구분선 */
 h2 {
     border-bottom: 2px solid #eee;
     padding-bottom: 10px;
     margin-top: 30px;
+    color: #333;
+}
+
+h3 {
+    text-align: center;
 }
 
 /* 입력 폼 스타일 */
@@ -50,7 +47,6 @@ h2 {
     align-items: center;
 }
 
-/* ⭐️ 입력창 폰트 크기 통일: 16px */
 .product-input-area input {
     padding: 8px;
     margin-right: 10px;
@@ -69,7 +65,7 @@ h2 {
     text-align: right;
 }
 
-/* 버튼 스타일 (버튼도 폰트 크기를 상속받지 않는 경우가 많아 명시적으로 16px 설정) */
+/* 버튼 스타일 */
 #add-product-btn {
     padding: 8px 15px;
     background-color: #4CAF50;
@@ -79,28 +75,40 @@ h2 {
     border-radius: 3px;
     white-space: nowrap;
     font-size: 16px;
-    /* ⭐️ 버튼 폰트 크기 통일 */
 }
 
 #add-product-btn:hover {
     background-color: #1e7e34;
 }
 
-/* 테이블 스타일 */
+/* 상품 검색 영역 스타일 */
+.product-search-area {
+    margin-bottom: 20px;
+}
+
+#search-input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* 테이블 공통 스타일 */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* ⭐️ 그림자 추가 */
 }
 
-/* ⭐️ 테이블 헤더(th)와 데이터 셀(td) 폰트 크기 통일: 16px */
 th,
 td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
     font-size: 16px;
-    /* ⭐️ 14px에서 16px로 수정 */
 }
 
 th {
@@ -108,7 +116,59 @@ th {
     color: white;
 }
 
-/* 삭제 버튼 스타일 */
+tbody tr:hover {
+    background-color: #f1f8ff;
+}
+
+.price-cell,
+.stock-cell {
+    text-align: right;
+}
+
+/* 주문 가능 상품 목록 */
+#Buy-section table thead th {
+    background-color: #007bff;
+}
+
+.buy-total-price {
+    text-align: right;
+    font-weight: bold;
+    color: #d9534f;
+}
+
+.buy-quantity-input {
+    width: 50px;
+    padding: 5px;
+    text-align: right;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.buy-btn {
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 60px;
+}
+
+.buy-btn:hover {
+    background-color: #e0a800;
+}
+
+/* 주문 목록 */
+#order-section table thead th {
+    background-color: #6c757d;
+}
+
+
+/* 삭제 및 수정 */
+
+
 .delete-btn {
     background-color: #fa5a5a;
     color: white;
@@ -117,56 +177,20 @@ th {
     cursor: pointer;
     border-radius: 4px;
     font-size: 16px;
-    /* ⭐️ 삭제 버튼 폰트 크기 통일 */
-
 }
 
 .delete-btn:hover {
     background-color: #d32f2f;
 }
 
-/* 수정 인풋 스타일 (Double Click 시 나타남) */
 .edit-input {
     width: 90%;
     padding: 3px;
     border: 1px solid #007bff;
     box-sizing: border-box;
     font-size: 16px;
-    /* ⭐️ 수정 인풋 폰트 크기 통일 */
 }
-
-/* 상품명 셀 (더블클릭 영역) */
-.product-name-cell {
-    cursor: pointer;
-    position: relative;
-}
-
-/* 상품 검색 영역 스타일 */
-.product-search-area {
-    margin-bottom: 20px;
-}
-
-/* ⭐️ 검색창 폰트 크기 통일: 16px */
-#search-input {
-    padding: 10px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    /* ⭐️ 검색창 폰트 크기 통일 */
-}
-
-/* ... (기존 스타일 유지) ... */
-
 .editable-cell {
     cursor: pointer;
     position: relative;
 }
-
-/* 가격/재고 셀 텍스트 정렬 */
-.price-cell,
-.stock-cell {
-    text-align: right;
-}
-
-/* ... (나머지 스타일 유지) ... */

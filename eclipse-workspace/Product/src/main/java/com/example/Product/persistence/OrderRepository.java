@@ -9,13 +9,18 @@ import com.example.Product.model.OrderEntity;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
 	
+	/*
 	@Query("SELECT o.orderId,"
 			+ "o.product.name,"
 			+ "o.quantity,"
 			+ "o.product.price,"
 			+ "(o.quantity * o.product.price) AS totalPrice FROM OrderEntity o")
 	List<Object[]> findAllByOrderTotalPrices();
+	*/
 	
-    List<OrderEntity> findAllByOrderByOrderTimeDesc();
+	@Query("SELECT o FROM OrderEntity o JOIN FETCH o.product ORDER BY o.orderTime DESC")
+    List<OrderEntity> findAllWithProductOrderByOrderTimeDesc();
+	
+	List<OrderEntity> findAllByOrderByOrderTimeDesc();
 	
 }

@@ -1,5 +1,6 @@
 const BASE_URL = "http://localhost:8080";
-const API_URL = BASE_URL + "/product";
+const API_PRODUCT_URL = BASE_URL + "/product";
+const API_ORDER_URL = BASE_URL + "/order";
 
 async function apiFetch(url, options = {}) {
     const response = await fetch(url, options);
@@ -20,11 +21,11 @@ async function apiFetch(url, options = {}) {
     return result;
 }
 
-//상품 목록 전체 조회 또는 검색
+// 상품 목록기능
 export const productApi = {
-    
+
     loadProducts: async (searchItem = '') => {
-        let url = API_URL;
+        let url = API_PRODUCT_URL;
 
         if (searchItem) {
             url += "/listName?name=" + encodeURIComponent(searchItem);
@@ -36,9 +37,8 @@ export const productApi = {
         return result.data;
     },
 
-    /** 상품 추가 (POST) */
     addProduct: async (newProduct) => {
-        const url = API_URL + "/create";
+        const url = API_PRODUCT_URL + "/create";
         const options = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -48,9 +48,8 @@ export const productApi = {
         return result.data
     },
 
-    /** 상품 수정 (PUT) */
     updateProduct: async (updatedProduct) => {
-        const url = API_URL + "/update";
+        const url = API_PRODUCT_URL + "/update";
         const options = {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -60,9 +59,8 @@ export const productApi = {
         return result.data;
     },
 
-    /** 상품 삭제 (DELETE) */
     deleteProduct: async (id) => {
-        const url = `${API_URL}/delete/${id}`;
+        const url = `${API_PRODUCT_URL}/delete/${id}`;
         const options = {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -70,5 +68,32 @@ export const productApi = {
         const result = await apiFetch(url, options);
         return result.data;
     }
-    
+};
+
+// 주문 관련기능
+export const orderApi = {
+
+    createOrder: async (productId, quantity) => {
+        const url = API_ORDER_URL + "/create";
+
+        const orderRequest = {
+            productId: productId,
+            quantity: quantity
+        };
+
+        const options = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderRequest)
+        };
+
+        const result = await apiFetch(url, options);
+        return result.data[0];
+    },
+
+    loadOrders: async () => {
+        const url = API_ORDER_URL + "/listAll";
+        const result = await apiFetch(url);
+        return result.data;
+    }
 };
