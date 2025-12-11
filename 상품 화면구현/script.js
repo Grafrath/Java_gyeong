@@ -13,7 +13,6 @@ function renderProductList(products) {
     productListBody.innerHTML = "";
 
     if (!products || products.length === 0) {
-        // 등록된 상품이 없을경우
         const tr = productListBody.insertRow();
         const td = tr.insertCell();
         td.colSpan = 7;
@@ -65,12 +64,12 @@ function renderProductList(products) {
     });
 }
 
-// 전체 상품 목록 조회 또는 검색
-async function loadProducts(searchTerm = '') {
+// 전체 목록 조회 또는 상품명 검색
+async function loadProducts(searchItem = '') {
     let url = API_URL;
 
-    if (searchTerm) {
-        url += "/listName?name=" + encodeURIComponent(searchTerm);
+    if (searchItem) {
+        url += "/listName?name=" + encodeURIComponent(searchItem);
     } else {
         url += "/listAll";
     }
