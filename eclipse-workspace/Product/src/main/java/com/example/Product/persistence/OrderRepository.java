@@ -21,6 +21,4 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
 	@Query("SELECT o FROM OrderEntity o JOIN FETCH o.product ORDER BY o.orderTime DESC")
     List<OrderEntity> findAllWithProductOrderByOrderTimeDesc();
 	
-	List<OrderEntity> findAllByOrderByOrderTimeDesc();
-	
 }

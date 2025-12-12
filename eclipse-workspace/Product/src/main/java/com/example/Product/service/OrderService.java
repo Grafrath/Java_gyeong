@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.Product.dto.OrderRequestDTO;
 import com.example.Product.dto.OrderResponseDTO;
+import com.example.Product.exception.ProductNotFoundException;
 import com.example.Product.model.OrderEntity;
 import com.example.Product.model.ProductEntity;
 import com.example.Product.persistence.OrderRepository;
@@ -22,32 +23,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrderService {
 	
+	private final ProductService productService;
 	private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     
-    private ProductEntity validateOrder(int productId, int quantity) {
-    	if (quantity <= 0) {
-    		log.warn("주문 수량 오류: 수량은 1개 이상이어야 합니다. Quantity: {}", quantity);
-    		throw new RuntimeException("주문 수량은 1개 이상이어야 합니다.");
-    	}
-    	
-    	Optional<ProductEntity> productOptional = productRepository.findById(productId);
-    	
-    	if (productOptional.isEmpty()) {
-    		log.warn("상품 없음 오류: Product ID: {}", productId);
-    		throw new RuntimeException("주문하려는 상품을 찾을 수 없습니다.");
-    	}
-    	
-    	ProductEntity product = productOptional.get();
-    	
-    	if (product.getStock() < quantity) {
-    		log.warn("재고 부족 오류: Product ID: {}, Requested: {}, Current Stock: {}",productId, quantity, product.getStock());
-    		throw new RuntimeException("재고가 부족하여 주문할 수 없습니다. 현재 재고: " + product.getStock());
-    	}
-    	
-    	return product;
+    // 상품 조회
+    private ProductEntity findProductForOrder(int productId) {
+    	return productRepository.findById(productId).orElseThrow(
+    			() -> new ProductNotFoundException("주문할 상품을 찾을 수 없습니다. (ID: " + productId + ")"));
     }
     
+    // 주문 목록 조회
     public List<OrderResponseDTO> listAllOrders() {
     	List<OrderEntity> entities = orderRepository.findAllWithProductOrderByOrderTimeDesc();
     	
@@ -61,18 +47,18 @@ public class OrderService {
     	int productId = requestDTO.getProductId();
     	int quantity = requestDTO.getQuantity();
     	
-    	ProductEntity product = validateOrder(productId, quantity);
+    	ProductEntity product = findProductForOrder(productId);
+    	productService.decreaseStock(productId ,quantity);
     	
-    	product.setStock(product.getStock() - quantity);
-    	productRepository.save(product);
-    	
-    	int orderTotalPrice = product.getPrice() * quantity;
+    	int orderPrice = product.getPrice();
+    	int orderTotalPrice = orderPrice * quantity;
     	
     	OrderEntity order = OrderEntity.builder()
     			.product(product).quantity(quantity)
+    			.orderPrice(orderPrice)
     			.orderTotalPrices(orderTotalPrice).build();
     	
     	return orderRepository.save(order);
-    }
+    	}
     
 }

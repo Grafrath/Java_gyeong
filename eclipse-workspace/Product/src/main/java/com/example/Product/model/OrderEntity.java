@@ -32,6 +32,10 @@ public class OrderEntity {
 	private ProductEntity product;
 	
 	private int quantity;
+	
+	// 주문 시점의 상품가 (OrderService에서 ProductEntity.getPrice()를 조회하여 저장)
+	private int orderPrice;
+	// 주문 총액 (OrderService에서 quantity * orderPrice로 계산하여 저장)
 	private int orderTotalPrices;
 	
 	@CreationTimestamp
