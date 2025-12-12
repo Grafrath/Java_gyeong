@@ -17,6 +17,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 	
 	@Modifying
     @Query("UPDATE ProductEntity p SET p.stock = p.stock - :quantity, p.updateTime = CURRENT_TIMESTAMP " +
-           "WHERE p.id = :productId AND p.stock >= :quantity") // 재고 검증 조건 추가
+           "WHERE p.id = :productId AND p.stock >= :quantity")
     int decreaseStock(@Param("productId") int productId, @Param("quantity") int quantity);
 }

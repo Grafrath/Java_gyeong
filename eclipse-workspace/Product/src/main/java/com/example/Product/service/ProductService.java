@@ -43,17 +43,20 @@ public class ProductService {
 	}
 	
 	//전체 조회
+	@Transactional
 	public List<ProductEntity> listAll () {
 		return repository.findAll(Sort.by(Sort.Direction.DESC, "createTime"));
 	}
 	
 	//ID로 단일 조회 
+	@Transactional
 	public ProductEntity listOne(int id) {
 		return repository.findById(id)
 				.orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 	}
 	
 	//상품명으로 단일 조회
+	@Transactional
 	public List<ProductEntity> listByName(String name) {
 		List<ProductEntity> products = repository.findByNameOrderByIdDesc(name);
 		
