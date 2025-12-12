@@ -20,28 +20,6 @@ public class ProductService {
 	
 	private final ProductRepository repository;
 	
-	private void validate (ProductEntity entity) {
-		if (entity == null) {
-			log.warn("상품 정보가 전달되지 않았습니다.");
-			throw new RuntimeException("상품 정보가 전달되지 않았습니다.");
-		}
-		
-		if (entity.getName() == null || entity.getName().trim().isEmpty()) {
-			log.warn("상품 이름이 비어있습니다.");
-			throw new RuntimeException("상품 이름이 비어있습니다.");
-		}
-		
-		if (entity.getPrice() < 0) {
-			log.warn("가격이 잘못되었습니다.");
-			throw new RuntimeException("가격이 잘못되었습니다.");
-		}
-		
-		if (entity.getStock() < 0) {
-			log.warn("수량이 잘못되었습니다.");
-			throw new RuntimeException("수량이 잘못되었습니다.");
-		}
-	}
-	
 	//전체 조회
 	@Transactional
 	public List<ProductEntity> listAll () {
@@ -69,14 +47,12 @@ public class ProductService {
 	
 	@Transactional
 	public ProductEntity create (ProductEntity entity) {
-    	validate(entity);
 		
     	return repository.save(entity);
     }
 	
 	@Transactional
 	public ProductEntity update(ProductEntity entity) {
-		validate(entity);
 		
 		ProductEntity original = repository.findById(entity.getId())
 				.orElseThrow(() -> new RuntimeException("수정할 상품을 찾을 수 없습니다."));

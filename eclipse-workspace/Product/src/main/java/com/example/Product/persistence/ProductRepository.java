@@ -1,6 +1,7 @@
 package com.example.Product.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,7 +13,7 @@ import com.example.Product.model.ProductEntity;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
-	List<ProductEntity> findByName(String name);
+	Optional<ProductEntity> findByName(String name);
 	List<ProductEntity> findByNameOrderByIdDesc(String name);
 	
 	@Modifying
